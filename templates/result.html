@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recommendation — {{ crop|capitalize }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="field">
+    <header class="field__header">
+      <p class="field__eyebrow">Recommendation</p>
+      <h1 class="field__title">Plant {{ crop }}.</h1>
+      <p class="field__sub">{{ confidence }}% match on the readings you gave.</p>
+    </header>
+
+    <section class="readback">
+      <p class="readback__title">What you entered</p>
+      <ul class="readback__list">
+        {% for f, v in values.items() %}
+        <li><span>{{ meta[f].label }}</span><span>{{ v }}{{ meta[f].unit }}</span></li>
+        {% endfor %}
+      </ul>
+    </section>
+
+    {% if alternatives %}
+    <section class="alt">
+      <p class="alt__title">Also worth considering</p>
+      <ul class="alt__list">
+        {% for name, conf in alternatives %}
+        <li><span>{{ name }}</span><span>{{ conf }}%</span></li>
+        {% endfor %}
+      </ul>
+    </section>
+    {% endif %}
+
+    <a class="plot__submit plot__submit--link" href="{{ url_for('index') }}">Try another plot</a>
+  </div>
+</body>
+</html>

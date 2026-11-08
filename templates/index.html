@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crop Recommendation</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="field">
+    <header class="field__header">
+      <p class="field__eyebrow">Soil &amp; Climate Input</p>
+      <h1 class="field__title">What should you plant here?</h1>
+      <p class="field__sub">Enter your soil nutrients and local climate readings. The model checks them against 22 crops and tells you the closest match.</p>
+    </header>
+
+    {% if error %}
+    <div class="notice notice--error">{{ error }}</div>
+    {% endif %}
+
+    <form class="plot" method="POST" action="{{ url_for('predict') }}">
+      <div class="plot__grid">
+        {% for f in fields %}
+        <div class="plot__row">
+          <label for="{{ f }}">
+            {{ meta[f].label }}
+            {% if meta[f].unit %}<span class="plot__unit">{{ meta[f].unit }}</span>{% endif %}
+          </label>
+          <input
+            type="number"
+            step="any"
+            id="{{ f }}"
+            name="{{ f }}"
+            placeholder="{{ meta[f].placeholder }}"
+            value="{{ values.get(f, '') }}"
+            required
+          >
+        </div>
+        {% endfor %}
+      </div>
+      <button type="submit" class="plot__submit">Recommend a crop</button>
+    </form>
+
+    <footer class="field__footer">
+      <p>N / P / K are soil nutrient levels from a soil test. Rainfall is average seasonal rainfall for your plot.</p>
+    </footer>
+  </div>
+</body>
+</html>
